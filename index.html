@@ -1,0 +1,317 @@
+<!doctype html>
+<!--[if IE 9]> <html class="no-js ie9 fixed-layout" lang="en"> <![endif]-->
+<!--[if gt IE 9]><!--> <html class="no-js " lang="en"> <!--<![endif]-->
+<head>
+
+    <!-- Basic -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+     
+    <!-- Mobile Meta -->
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <!-- Site Meta -->
+    <title>WAKEB</title>
+    <meta name="keywords" content="AI">
+    <meta name="description" content="AI Wakeb">
+    <meta name="author" content="Wakeb">
+    
+    <!-- Site Icons -->
+    <link rel="apple-touch-icon" sizes="57x57" href="static/images/siteicons/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="static/images/siteicons/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="static/images/siteicons/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="static/images/siteicons/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="static/images/siteicons/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="static/images/siteicons/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="static/images/siteicons/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="static/images/siteicons/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="static/images/siteicons/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="static/images/siteicons/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="144x144"  href="static/images/siteicons/android-icon-144x144.png">
+    
+    <link rel="icon" type="image/png" sizes="32x32" href="static/images/siteicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="static/images/siteicons/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="static/images/siteicons/favicon-16x16.png">
+    <link rel="manifest" href="static/images/siteicons/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="static/images/siteicons/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+
+
+	
+    <!-- Custom & Default Styles -->
+	<link rel="stylesheet" href="static/css/bootstrap.min.css">
+	<link rel="stylesheet" href="static/css/style.css">
+	<!--[if lt IE 9]>
+		<script src="static/js/vendor/html5shiv.min.js"></script>
+		<script src="static/js/vendor/respond.min.js"></script>
+	<![endif]-->
+
+</head>
+<body>
+
+
+    <!-- Loading Animation-->
+    <div id="layout-loading">
+        <div class="loader-effect"></div>
+    </div>
+
+ <!-- Modal -->
+  <div class="modal fade" id="videoModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">x</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <div class="adv-content">
+              <video autoplay muted loop id = "myVideo" src="static/images/img_waiting.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+              </video>
+              
+            </div>  
+            <div class="adv-overflow">
+                <div class="chosen">
+                    <div class="title">chosen Ad for</div>
+                    <ul>
+                        <li>
+                            <img src="static/images/brush.png">
+                            <span><small id="Age">Loading.. </small> Years old</span>
+                        </li>
+                        <li>
+                            <img src="static/images/gender.png">
+                            <span id="Gender">Loading..</span>
+                        </li>
+                        <li>
+                            <img src="static/images/smile.png">
+                            <span id="Emotion">Loading..</span>
+                        </li>
+                        <li>
+                            <img src="static/images/glasses.png">
+                            <span id="Wearing_Glasses">Loading..</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="statics">
+                    <div class="title">Statics</div>
+                    <fieldset>
+                        <legend>Viewers</legend>
+                        <ul>
+                            <li>
+                                <label>All</label>
+                                <span id="All">0</span>
+                            </li>
+                            <li>
+                                <label>Males</label>
+                                <span id="Males">0</span>
+                            </li>
+                            <li>
+                                <label>Females</label>
+                                <span id="Females">0</span>
+                            </li>
+                            <li>
+                                <label>Glasses</label>
+                                <span id="Glasses">0</span>
+                            </li>
+                        </ul>
+                    </fieldset>
+                    <fieldset>
+                        <legend>Ads</legend>
+                        <ul>
+                            <li>
+                                <label>Males Ads</label>
+                                <span id="Males_Ads">0</span>
+                            </li>
+                            <li>
+                                <label>Females Ads</label>
+                                <span id="Females_Ads">0</span>
+                            </li>
+                            <li>
+                                <label>Glasses Ads</label>
+                                <span id="Glasses_Ads">0</span>
+                            </li>
+                        </ul>
+                    </fieldset>
+                    <fieldset>
+                        <legend>Time</legend>
+                        <ul>
+                            <li>
+                                <label>Time duration</label>
+                                <span id="Current_Viewer">0</span>
+                            </li>
+                            <li>
+                                <label>Total times</label>
+                                <span id="Total_times">0</span>
+                            </li>
+                        </ul>
+                    </fieldset>
+                    <fieldset>
+                        <legend>Be happy for <small id="emotion_to_zero">10</small> seconds</legend>
+                        <ul>
+                            <li>
+                                <label id="Happy">Happy</label>
+                                <div class="progress">
+                                  <div class="progress-bar" id="progressHappy" role="progressbar" aria-valuenow="0"
+                                  aria-valuemin="0" aria-valuemax="100" style="width:0%">
+                                  </div>
+                                </div>
+                            </li>
+                            <li>
+                                <label id="Normal">Normal</label>
+                                <div class="progress">
+                                  <div class="progress-bar" id="progressNormal" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </fieldset>
+                </div>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="wrap">
+
+    <!-- Header -->
+    <div id="header">   
+        <div class="navigation fixed-top background scroll">
+                <div class="container">
+                    <nav id="navbar-example" class="navbar navbar-expand-lg navbar-light">
+                        <a class="navbar-brand brand-logo" target="-blank" href="http://wakeb.tech/">
+                            <img src="static/images/logo.png" alt="Wakeb" title="Wakeb">
+                        </a>
+                                                
+                        <button class="navbar-toggler hamburger " style=" visibility: visible;" type="button" data-toggle="collapse" data-target="#nav-content" aria-controls="nav-content" aria-expanded="false" aria-label="Toggle navigation">
+                            <span class="hamburger-box">
+                            <span class="hamburger-label"></span>
+                            <span class="hamburger-inner"></span>
+                          </span>
+                          </button>                    
+
+                        <div class="top-nav collapse navbar-collapse" id="nav-content">   
+                            <ul class="navbar-nav ml-auto">
+                                <li class="nav-item">
+                                    <a href="#">Home</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#">Products</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#">Services</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#">Solutions</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#">Blog</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#">About us</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#">Contact us</a>
+                                </li>
+                                <li class="nav-item d-flex align-items-center">
+                                    <a href="index.rtl.html">
+                                        <img src="static/images/lang.png" class="mr-1">
+                                        <span>Arabic</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </nav>
+            </div>
+        </div>
+    </div>
+    <!--/. Header -->
+
+    <!-- Page intro -->
+    <div id="hero-bg" class="scroll top">
+        <div class="container">
+            <div class="hero-inner row">
+                <div class="col-lg-6 col-md-7">
+                    <div class="hero-content">
+                        <div class="powered-by">
+                            <div class="media">
+                              <img src="static/images/robot.png" class="mr-2">
+                              <div class="media-body">
+                                <h5 class="my-0">Product powered by</h5>
+                                <h3 class="my-0">MASBAR</h3>
+                              </div>
+                            </div>
+                        </div>
+                        <h1>Intelligent Personalized Marketing System (IPMS)</h1>
+                        <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam era.</p>
+                        <ul>
+                            <li>Step1</li>
+                            <li >
+                                <button class="btn link" id="snap">
+                                    <span>Open Camera</span> 
+                                    <img src="static/images/cam.png"></button>
+                            </li>
+                            <li class="check"><img src="static/images/check.png"></li>
+                        </ul>
+                        <ul>
+                            <li>Step2</li>
+                            <li >
+                                <button class="btn  link" id="play" data-toggle="modal" data-target="#videoModal">
+                                    <span>View Ad</span> 
+                                    <img src="static/images/play.png"></button>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-5 hide-small">
+                    <div class="here-side-img">
+                        <img src="static/images/face-IPMS.svg">
+			            <div id="videocontainer" class="divcontainer text-center"  style="display: none;">
+                            	<video onplay="onPlay(this)" id="inputVideo" autoplay muted type="video/mp4"></video>
+                            <canvas id="overlay" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+    <!-- /. Page intro -->
+
+    <!--Footer-->
+    <div class="dark-footer">
+        <div class="container">
+        <div class="row">
+            <div class="logo col-md-4 ">
+                <a target="_blank" href="http://wakeb.tech/"><img src="static/images/light-wakeb.png" alt="wakeb" title="wakeb"></a>
+            </div>
+            <div class="col-md-8 cpr">
+                Product powered by Wakeb, All copyrights reserved © 2019
+            </div>
+        </div>
+        </div>
+    </div>
+    <!-- /. Footer -->    
+
+  </div><!--./wrap -->
+
+  <script src="static/js/jquery.min.js"></script>	
+  
+  <script src="static/js/bootstrap.min.js"></script>
+  <script src="static/js/face-api.min.js"></script>	
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.0.0/dist/tf.min.js"></script>
+  <script>
+    faceapi.loadTinyFaceDetectorModel("static/models")
+
+    faceapi.nets.ageGenderNet.loadFromUri("static/models")
+    faceapi.nets.ssdMobilenetv1.loadFromUri("static/models")
+
+    faceapi.nets.faceExpressionNet.loadFromUri("static/models")
+  </script>
+  <script src="smartads.js"></script>
+  <script src="static/js/functions.js"></script>
+
+
+</body>
+</html>

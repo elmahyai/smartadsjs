@@ -1,0 +1,618 @@
+<!doctype html>
+<!--[if IE 9]> <html class="no-js ie9 fixed-layout" lang="en"> <![endif]-->
+<!--[if gt IE 9]><!--> <html class="no-js " lang="en"> <!--<![endif]-->
+<head>
+
+    <!-- Basic -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+     
+    <!-- Mobile Meta -->
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <!-- Site Meta -->
+    <title>WAKEB</title>
+    <meta name="keywords" content="AI">
+    <meta name="description" content="AI Wakeb">
+    <meta name="author" content="Wakeb">
+    
+    <!-- Site Icons -->
+    <link rel="apple-touch-icon" sizes="57x57" href="{{ url_for('static', filename='images/siteicons/apple-icon-57x57.png')}}">
+    <link rel="apple-touch-icon" sizes="60x60" href="{{ url_for('static', filename='images/siteicons/apple-icon-60x60.png')}}">
+    <link rel="apple-touch-icon" sizes="72x72" href="{{ url_for('static', filename='images/siteicons/apple-icon-72x72.png')}}">
+    <link rel="apple-touch-icon" sizes="76x76" href="{{ url_for('static', filename='images/siteicons/apple-icon-76x76.png')}}">
+    <link rel="apple-touch-icon" sizes="114x114" href="{{ url_for('static', filename='images/siteicons/apple-icon-114x114.png')}}">
+    <link rel="apple-touch-icon" sizes="120x120" href="{{ url_for('static', filename='images/siteicons/apple-icon-120x120.png')}}">
+    <link rel="apple-touch-icon" sizes="144x144" href="{{ url_for('static', filename='images/siteicons/apple-icon-144x144.png')}}">
+    <link rel="apple-touch-icon" sizes="152x152" href="{{ url_for('static', filename='images/siteicons/apple-icon-152x152.png')}}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='images/siteicons/apple-icon-180x180.png')}}">
+    <link rel="icon" type="image/png" sizes="192x192"  href="{{ url_for('static', filename='images/siteicons/android-icon-192x192.png')}}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='images/siteicons/favicon-32x32.png')}}">
+    <link rel="icon" type="image/png" sizes="96x96" href="{{ url_for('static', filename='images/siteicons/favicon-96x96.png')}}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='images/siteicons/favicon-16x16.png')}}">
+    <link rel="manifest" href="{{ url_for('static', filename='images/siteicons/manifest.json')}}">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="{{ url_for('static', filename='images/siteicons/ms-icon-144x144.png')}}">
+    <meta name="theme-color" content="#ffffff">
+
+
+	
+    <!-- Custom & Default Styles -->
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css')}}">
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css')}}">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
+	<!--[if lt IE 9]>
+		<script src="{{ url_for('static', filename='js/vendor/html5shiv.min.js')}}"></script>
+		<script src="{{ url_for('static', filename='js/vendor/respond.min.js')}}"></script>
+	<![endif]-->
+
+</head>
+<body>
+
+
+    <!-- Loading Animation-->
+    <div id="layout-loading">
+        <div class="loader-effect"></div>
+    </div>
+
+ <!-- Modal -->
+  <div class="modal fade" id="videoModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">x</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <div class="adv-content">
+              <video autoplay muted loop id = "myVideo" src="{{ url_for('static', filename='images/ad2.mp4') }}" type="video/mp4">
+                        Your browser does not support the video tag.
+              </video>
+              
+            </div>  
+            <div class="adv-overflow">
+                <div class="chosen">
+                    <div class="title">chosen Ad for</div>
+                    <ul>
+                        <li>
+                            <img src="{{ url_for('static', filename='images/brush.png')}}">
+                            <span><small>26</small> Years old</span>
+                        </li>
+                        <li>
+                            <img src="{{ url_for('static', filename='images/gender.png')}}">
+                            <span>Male</span>
+                        </li>
+                        <li>
+                            <img src="{{ url_for('static', filename='images/smile.png')}}">
+                            <span>Natural</span>
+                        </li>
+                        <li>
+                            <img src="{{ url_for('static', filename='images/glasses.png')}}">
+                            <span>Wearing Glassess</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="statics">
+                    <div class="title">Statics</div>
+                    <fieldset>
+                        <legend>Viewers</legend>
+                        <ul>
+                            <li>
+                                <label>All</label>
+                                <span>46</span>
+                            </li>
+                            <li>
+                                <label>Male</label>
+                                <span>18</span>
+                            </li>
+                            <li>
+                                <label>Females</label>
+                                <span>15</span>
+                            </li>
+                            <li>
+                                <label>Glasses</label>
+                                <span>13</span>
+                            </li>
+                        </ul>
+                    </fieldset>
+                    <fieldset>
+                        <legend>Ads</legend>
+                        <ul>
+                            <li>
+                                <label>Males Ads</label>
+                                <span>46</span>
+                            </li>
+                            <li>
+                                <label>Females Ads</label>
+                                <span>18</span>
+                            </li>
+                            <li>
+                                <label>Glasses Ads</label>
+                                <span>15</span>
+                            </li>
+                        </ul>
+                    </fieldset>
+                    <fieldset>
+                        <legend>Time</legend>
+                        <ul>
+                            <li>
+                                <label>Current Viwers</label>
+                                <span>46</span>
+                            </li>
+                            <li>
+                                <label>Total times</label>
+                                <span>18</span>
+                            </li>
+                        </ul>
+                    </fieldset>
+                    <fieldset>
+                        <legend>Emotion</legend>
+                        <ul>
+                            <li>
+                                <label>Happy</label>
+                                <div class="progress">
+                                  <div class="progress-bar" role="progressbar" aria-valuenow="30"
+                                  aria-valuemin="0" aria-valuemax="100" style="width:30%">
+                                  </div>
+                                </div>
+                            </li>
+                            <li>
+                                <label>Sad</label>
+                                <div class="progress">
+                                  <div class="progress-bar" role="progressbar" aria-valuenow="50"
+                                  aria-valuemin="0" aria-valuemax="100" style="width:50%">
+                                  </div>
+                                </div>
+                            </li>
+                            <li>
+                                <label>Natural</label>
+                                <div class="progress">
+                                  <div class="progress-bar" role="progressbar" style="width: 40%" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </fieldset>
+                </div>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="wrap">
+
+    <!-- Header -->
+    <div id="header">   
+        <div class="navigation fixed-top background scroll">
+                <div class="container">
+                    <nav id="navbar-example" class="navbar navbar-expand-lg navbar-light">
+                        <a class="navbar-brand brand-logo" target="-blank" href="http://wakeb.tech/">
+                            <img src="{{ url_for('static', filename='images/logo.png')}}" alt="Wakeb" title="Wakeb">
+                        </a>
+                                                
+                        <button class="navbar-toggler hamburger " style=" visibility: visible;" type="button" data-toggle="collapse" data-target="#nav-content" aria-controls="nav-content" aria-expanded="false" aria-label="Toggle navigation">
+                            <span class="hamburger-box">
+                            <span class="hamburger-label"></span>
+                            <span class="hamburger-inner"></span>
+                          </span>
+                          </button>                    
+
+                        <div class="top-nav collapse navbar-collapse" id="nav-content">   
+                            <ul class="navbar-nav ml-auto">
+                                <li class="nav-item">
+                                    <a href="#">Home</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#">Products</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#">Services</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#">Solutions</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#">Blog</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#">About us</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#">Contact us</a>
+                                </li>
+                                <li class="nav-item d-flex align-items-center">
+                                    <a href="index.rtl.html">
+                                        <img src="{{ url_for('static', filename='images/lang.png')}}" class="mr-1">
+                                        <span>Arabic</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </nav>
+            </div>
+        </div>
+    </div>
+    <!--/. Header -->
+
+    <!-- Page intro -->
+    <div id="hero-bg" class="scroll top">
+        <div class="container">
+            <div class="hero-inner row">
+                <div class="col-lg-6 col-md-7">
+                    <div class="hero-content">
+                        <div class="powered-by">
+                            <div class="media">
+                              <img src="{{ url_for('static', filename='images/robot.png')}}" class="mr-2">
+                              <div class="media-body">
+                                <h5 class="my-0">Product powered by</h5>
+                                <h3 class="my-0">MASBAR</h3>
+                              </div>
+                            </div>
+                        </div>
+                        <h1>Intelligent Personalized Marketing System (IPMS)</h1>
+                        <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam era.</p>
+                        <ul>
+                            <li>Step1</li>
+                            <li >
+                                <button class="btn link" id="snap">
+                                    <span>Open Camera</span> 
+                                    <img src="{{ url_for('static', filename='images/cam.png')}}"></button>
+                            </li>
+                            <li class="check"><img src="{{ url_for('static', filename='images/check.png')}}"></li>
+                        </ul>
+                        <ul>
+                            <li>Step2</li>
+                            <li >
+                                <button class="btn  link" id="play" data-toggle="modal" data-target="#videoModal">
+                                    <span>View Ad</span> 
+                                    <img src="{{ url_for('static', filename='images/play.png')}}"></button>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-5 hide-small">
+                    <div class="here-side-img">
+                        <img src="{{ url_for('static', filename='images/face-IPMS.svg')}}">
+			            <div id="videocontainer" class="divcontainer text-center"  style="display: none;">
+                            	<video onplay="onPlay(this)" id="inputVideo" autoplay muted type="video/mp4"></video>
+                            <canvas id="overlay" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+    <!-- /. Page intro -->
+
+    <!--Footer-->
+    <div class="dark-footer">
+        <div class="container">
+        <div class="row">
+            <div class="logo col-md-4 ">
+                <a target="_blank" href="http://wakeb.tech/"><img src="{{ url_for('static', filename='images/light-wakeb.png')}}" alt="wakeb" title="wakeb"></a>
+            </div>
+            <div class="col-md-8 cpr">
+                Product powered by Wakeb, All copyrights reserved © 2019
+            </div>
+        </div>
+        </div>
+    </div>
+    <!-- /. Footer -->    
+
+  </div><!--./wrap -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <script src="{{ url_for('static', filename='js/jquery.min.js')}}"></script>
+  <script src="{{ url_for('static', filename='js/bootstrap.min.js')}}"></script>
+  <script src="{{ url_for('static', filename='js/face-api.min.js')}}"></script>
+  <!-- <script src="https://code.jquery.com/jquery-1.12.2.min.js" type="text/javascript"></script> -->
+
+  <script>
+// start of javascript ...................................
+// ...............................................................
+// ...............................................................
+// ...............................................................
+// ...............................................................
+// ...............................................................
+// ...............................................................
+// ...............................................................
+      $(document).ready(function() {
+          faceapi.tf.ENV.set('WEBGL_PACK', false)
+
+      })
+      const videoEl = document.getElementById('inputVideo')
+      const canvas = document.getElementById('overlay')
+      var video1 = document.getElementById("myVideo");
+      async function run() {
+          faceapi.loadTinyFaceDetectorModel('https://www.rocksetta.com/tensorflowjs/saved-models/face-api-js/')
+          await faceapi.nets.ageGenderNet.loadFromUri("{{ url_for('static', filename='/models')}}")
+          await faceapi.nets.ssdMobilenetv1.loadFromUri("{{ url_for('static', filename='/models')}}")
+
+          await faceapi.nets.faceExpressionNet.loadFromUri("{{ url_for('static', filename='/models')}}")
+
+
+          
+          const stream = await navigator.mediaDevices.getUserMedia({ video: true })
+          videoEl.srcObject = stream;
+
+      }
+      function resizeCanvasAndResults(dimensions, canvas, results) {
+          const { width, height } = dimensions instanceof HTMLVideoElement
+              ? faceapi.getMediaDimensions(dimensions)
+              : dimensions
+          //return results.map(res => res)
+          return results
+      };
+
+      function drawDetections(dimensions, canvas, results) {
+
+      };
+      
+      async function onPlay(videoEl) {
+
+          const options = new faceapi.TinyFaceDetectorOptions({ inputSize: 416, scoreThreshold: 0.2 })
+          var result = await faceapi.detectSingleFace(videoEl, options).withFaceExpressions().withAgeAndGender()
+          //console.log(result.age)
+
+          if (result) {
+              document.getElementById('lbtimetitle').innerHTML = " الوقت الذي استغرقه مشاهد  الإعلان";
+              //console.log(counter)
+              var age1 = Math.round(result.age - 5)
+              gender1 = result.gender
+              //console.log(result.gender)
+              //console.log(result.expressions)
+              var ex = result.expressions
+              var ex1 = Object.keys(ex).reduce((a, b) => ex[a] > ex[b] ? a : b);
+              //console.log(ex1)
+              const resizedResults = resizeCanvasAndResults(videoEl, canvas, result.detection)
+              //console.log("resizedresults")
+              //resizedResults = result.detection
+              //console.log(resizedResults)
+              //cropped_box = resizedResults.map(resizedResults => resizedResults.box)
+              cropped_box = resizedResults.box
+              //dim_x = Math.round(cropped_box.map(box => box.x))
+              //dim_y = Math.round(cropped_box.map(box => box.y))
+              //dim_width = Math.round(cropped_box.map(box => box.width))
+              //dim_height = Math.round(cropped_box.map(box => box.height))
+
+              dim_x = Math.round(cropped_box.x)
+              dim_y = Math.round(cropped_box.y)
+              dim_width = Math.round(cropped_box.width)
+              dim_height = Math.round(cropped_box.height)
+              var crop = {
+                  top :  Math.max((dim_y - 55),0),
+                  left : dim_x ,
+                  width : dim_width + 20,
+                  height : dim_height + 50
+              }
+              var ctx = canvas.getContext("2d");
+              
+              //console.log([ctx,crop.top,crop.left])
+
+
+
+              //const divface = document.createElement("div");
+
+              //const c = document.getElementById('videocontainer')
+              //c.append(divface)  
+              
+              //divface.setAttribute("style",`width:${dim_width}px;height:${dim_height}px; position:absolute;
+              // top: ${dim_y}px; left: ${dim_x}px; border:1px solid #f00; z-index: 10000000;display:block`)
+              canvas.width = 128
+              canvas.height = 128
+              ctx.drawImage(videoEl, crop.left, crop.top, crop.width, crop.height, 0, 0, 128, 128);
+              send_canvas_ctx(age1, gender1,ex1);
+
+              // todo
+              // stop the loop
+              if (reversecounter > 2 && glassesvariable != ''){
+
+                counter = counter + 1
+                document.getElementById('lball').innerHTML = counter;
+                console.log("a new person passed by ")
+
+                if (gender1 === "male" && glassesvariable === 'glasses'){
+
+                    countermanglasses = countermanglasses + 1
+                    document.getElementById('lbmanglasses').innerHTML = countermanglasses;
+                } else if (gender1 === "female" && glassesvariable === 'glasses') {
+
+                    counterwomanglasses = counterwomanglasses + 1
+                    document.getElementById('lbwomanglasses').innerHTML = counterwomanglasses;
+                } else if (gender1 === "male" && glassesvariable === 'noglasses') {
+
+                    countermannoglasses = countermannoglasses + 1
+                    document.getElementById('lbmannoglasses').innerHTML = countermannoglasses;
+                } else if (gender1 === "female" && glassesvariable === 'noglasses') {
+
+                    counterwomannoglasses = counterwomannoglasses + 1
+                    document.getElementById('lbwomannoglasses').innerHTML = counterwomannoglasses;
+                }
+                
+                
+                //console.log(counter)
+              }
+              time_in_front_of_camera = time_in_front_of_camera + 2
+              document.getElementById('lbtime').innerHTML = "ثانية" + time_in_front_of_camera  ;
+
+              if (glassesvariable != ''){
+                reversecounter = 0
+              }
+              reverse_time_in_front_of_camera = 0
+              
+
+          }
+          else {
+              document.getElementById('lbltipAddedComment').innerHTML = "النظارة";
+              document.getElementById('lbltipAddedage').innerHTML = "العمر";
+
+              document.getElementById('lbltipAdded').innerHTML = "قف أمام الكاميرا حتي أراك";
+              document.getElementById('lbltipAddedgender').innerHTML = "الجنس";
+              document.getElementById('lbltipAddedexpression').innerHTML = "التعبيرات الوجهية";
+              document.getElementById('lbtimetitle').innerHTML = " الوقت الذي استغرقه مشاهد  الإعلان السابق";
+
+              current_video = ""
+              //console.log("else")
+              
+              if (video1.getAttribute("src") !== "/static/kkk.webm"){
+                  //current_video = "man"
+                  video1.setAttribute("src", "{{ url_for('static', filename='kkk.webm')}}")
+               }
+               //setTimeout(() => onPlay(videoEl),1000)
+              reversecounter = reversecounter + 1
+            //console.log("revesrcounter")
+            //console.log(reversecounter)
+              reverse_time_in_front_of_camera = reverse_time_in_front_of_camera + 1
+              if (reverse_time_in_front_of_camera > 4 && time_in_front_of_camera > 0){
+                    console.log("time spent by last person was: ")
+                    console.log(time_in_front_of_camera)
+                    time_in_front_of_camera = 0
+                    reverse_time_in_front_of_camera = 0
+                    document.getElementById('lbtimetitle').innerHTML = " الوقت الذي يستغرقه مشاهد الإعلان السابق";
+                    document.getElementById('lbtime').innerHTML = "ثانية" + 0  ;
+
+                }
+                
+                }
+      }
+
+      document.getElementById("snap").addEventListener("click", function() {
+          run()
+      });
+      var counter = 0
+      var countermanglasses = 0
+      var countermannoglasses = 0
+      var counterwomanglasses = 0
+      var counterwomannoglasses = 0
+      var reversecounter = 20000
+      var time_in_front_of_camera = 0
+      var reverse_time_in_front_of_camera = 0
+      var gender1 = ''
+      var glassesvariable = ''
+      document.getElementById("play").addEventListener("click", function() {
+      window.setInterval(function(){onPlay(videoEl)}, 2000);
+        
+
+          
+      });
+      var current_video = ""
+
+      function send_canvas_ctx(age1,gender1,ex1) {
+          document.getElementById('lbltipAdded').innerHTML = "الإعلان الحالي تم تحديده بناءا علي ";
+          document.getElementById('lbltipAddedage').innerHTML = "العمر التقديري " + age1;
+          if (gender1 === "male"){
+            document.getElementById('lbltipAddedgender').innerHTML = "رجل";
+          } else if (gender1 === "female") {
+          document.getElementById('lbltipAddedgender').innerHTML = "امرأة";
+          }
+
+          if (ex1 === "neutral"){
+            document.getElementById('lbltipAddedexpression').innerHTML = "تعبيرات وجه طبيعية";
+          } else if (ex1 === "happy") {
+          document.getElementById('lbltipAddedexpression').innerHTML = "سعيد";
+          } else if (ex1 === "sad") {
+          document.getElementById('lbltipAddedexpression').innerHTML = "حزين";
+          }else if (ex1 === "angry") {
+          document.getElementById('lbltipAddedexpression').innerHTML = "غاضب";
+          }else if (ex1 === "fearful") {
+          document.getElementById('lbltipAddedexpression').innerHTML = "خائف";
+          }else if (ex1 === "disgusted") {
+          document.getElementById('lbltipAddedexpression').innerHTML = "مشمئذ";
+          }else if (ex1 === "surprised") {
+          document.getElementById('lbltipAddedexpression').innerHTML = "مندهش";
+          }
+
+
+
+          //var selected_model = document.querySelector('input[name="model"]:checked').value;
+          //console.log("sending img to server..")
+          //console.log(selected_model)
+          input_data = canvas.toDataURL('image/png');
+          window.fetch('/snap_a_signal', {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({
+                  data: input_data,
+                  selected_model: "glass"
+              })
+          }).then((response) => response.json()).then((json) =>  {
+              //document.getElementById('results').innerHTML = json["results"]
+              //document.getElementById('accuracy').innerHTML = json["accuracy"]
+              message_to_show = json["results"] + '\n' + json["accuracy"]
+              glassesvariable = json["results"] 
+              //Swal.fire(message_to_show)
+              if (video1.getAttribute("src") === "/static/man.webm"){
+                  current_video = "man"
+              } else if (video1.getAttribute("src") === "/static/woman.webm") {
+                  current_video = "woman"
+              } else if (video1.getAttribute("src") === "/static/glasses.webm") {
+                  current_video = "glasses"
+              } else if (video1.getAttribute("src") === "/static/noglasses.webm") {
+                  current_video = "noglasses"
+              }
+              //console.log(json["results"])
+              if (json["results"] != current_video){
+                  if (json["results"] === "man"){
+                    document.getElementById('lbltipAddedComment').innerHTML = "رجل";
+                    video1.setAttribute("src", "{{ url_for('static', filename='man.webm')}}")
+                  } else if (json["results"] === "woman"){
+                    document.getElementById('lbltipAddedComment').innerHTML = "امرأة";
+                    video1.setAttribute("src", "{{ url_for('static', filename='woman.webm')}}")
+                  }  else if (json["results"] === "glasses"){
+                    document.getElementById('lbltipAddedComment').innerHTML = "ترتدي نظارة";
+                    video1.setAttribute("src", "{{ url_for('static', filename='glasses.webm')}}")
+                  }  else if (json["results"] === "noglasses"){
+                    document.getElementById('lbltipAddedComment').innerHTML = "لا ترتدي نظارة";
+
+                    video1.setAttribute("src", "{{ url_for('static', filename='noglasses.webm')}}")
+                  }
+              }
+              
+              
+              
+              //console.log("else2")
+              //const videoEl = document.getElementById('inputVideo')
+              //onPlay(videoEl)
+          });
+        }
+       // <h4 id="results">النتيجة تظهر هنا</h4>
+         //               <h4 id="accuracy">نسبة الدقة تظهر هنا</h4>
+  </script>
+  <!-- jQuery Files -->
+  <script src="{{ url_for('static', filename='js/functions.js')}}"></script>
+
+
+</body>
+</html>

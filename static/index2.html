@@ -1,0 +1,28 @@
+<!doctype html>
+<!--[if IE 9]> <html class="no-js ie9 fixed-layout" lang="en"> <![endif]-->
+<!--[if gt IE 9]><!--> <html class="no-js " lang="en"> <!--<![endif]-->
+<body>
+    <img id = "hi"/>
+       
+    <video id="inputVideo" autoplay muted type="video/mp4"></video>
+    <script src="js/face-api.min.js"></script>	
+  <script>
+      const videoEl = document.getElementById('inputVideo')
+
+      async function run() {
+          faceapi.tf.ENV.set('WEBGL_PACK', false)
+
+          const stream = await navigator.mediaDevices.getUserMedia({ video: true })
+          videoEl.srcObject = stream;
+          await faceapi.loadTinyFaceDetectorModel('models/')
+          
+      }
+      async function detectface(){
+        await run()
+        var result = await faceapi.detectSingleFace(videoEl)
+        console.log(result)
+      }
+      detectface()
+  </script>
+</body>
+</html>
