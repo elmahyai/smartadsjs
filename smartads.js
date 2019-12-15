@@ -11,13 +11,13 @@ const URL = "static/models"
 loadModels = async() => {
 
     await Promise.all([
-        faceapi.nets.tinyFaceDetector.loadFromUri(URL),
-        faceapi.nets.ageGenderNet.loadFromUri(URL),
-        faceapi.nets.faceExpressionNet.loadFromUri(URL)
+        faceapi.nets.tinyFaceDetector.loadFromUri(URL)
 ])}
 
         //faceapi.nets.ssdMobilenetv1.loadFromUri(URL)//,
-        //
+        //,
+       // faceapi.nets.ageGenderNet.loadFromUri(URL),
+       // faceapi.nets.faceExpressionNet.loadFromUri(URL)
 
 
 loadModels();
@@ -66,7 +66,9 @@ wait_for_load_glasses()
     async function onPlay(videoEl) {
 
         const options = new faceapi.TinyFaceDetectorOptions({ inputSize: 416, scoreThreshold: 0.2 })
-        var result = await faceapi.detectSingleFace(videoEl, options).withFaceExpressions().withAgeAndGender()
+        var result = await faceapi.detectSingleFace(videoEl, options)
+        
+        //.withFaceExpressions().withAgeAndGender()
 
 
         if (result) {
