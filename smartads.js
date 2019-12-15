@@ -25,7 +25,7 @@ loadModels();
 
 var model = 0
 async function wait_for_load_glasses(){
-    model = await Promise(tf.loadLayersModel("static/models/glasses/model.json"))
+    model = await tf.loadLayersModel("static/models/glasses/model.json")
     console.log("model glassese have been loaded")
 
 }
