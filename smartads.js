@@ -7,23 +7,25 @@ const videoEl = document.getElementById('inputVideo')
 const canvas = document.getElementById('overlay')
 var video1 = document.getElementById("myVideo");
 
+const URL = "static/models"
+loadModels = async() => {
 
-async function load_models(){
-    await faceapi.nets.tinyFaceDetector.loadFromUri("static/models")
-    await faceapi.nets.ageGenderNet.loadFromUri("static/models")
-    await faceapi.nets.ssdMobilenetv1.loadFromUri("static/models")
-
-    await faceapi.nets.faceExpressionNet.loadFromUri("static/models")
+    await Promise.all([
+        faceapi.nets.tinyFaceDetector.loadFromUri(URL),
+        faceapi.nets.ageGenderNet.loadFromUri(URL),
+        faceapi.nets.ssdMobilenetv1.loadFromUri(URL),
+        faceapi.nets.faceExpressionNet.loadFromUri(URL)
+])
 
 }
 
-load_models();
+loadModels();
 
 
 
 var model = 0
 async function wait_for_load_glasses(){
-    model = await tf.loadLayersModel("static/models/glasses/model.json");
+    model = await Promise(tf.loadLayersModel("static/models/glasses/model.json"))
     console.log("model glassese have been loaded")
 
 }
