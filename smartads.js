@@ -19,7 +19,14 @@ loadModels = async() => {
        // faceapi.nets.ageGenderNet.loadFromUri(URL),
        // faceapi.nets.faceExpressionNet.loadFromUri(URL)
 
-
+   //    <script>
+    //   faceapi.loadTinyFaceDetectorModel("static/models")
+   
+   //    faceapi.nets.ageGenderNet.loadFromUri("static/models")
+ //      faceapi.nets.ssdMobilenetv1.loadFromUri("static/models")
+   
+     //  faceapi.nets.faceExpressionNet.loadFromUri("static/models")
+    // </script>
 loadModels();
 
 
