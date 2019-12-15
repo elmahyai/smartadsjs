@@ -13,11 +13,12 @@ loadModels = async() => {
     await Promise.all([
         faceapi.nets.tinyFaceDetector.loadFromUri(URL),
         faceapi.nets.ageGenderNet.loadFromUri(URL),
-        faceapi.nets.ssdMobilenetv1.loadFromUri(URL),
         faceapi.nets.faceExpressionNet.loadFromUri(URL)
-])
+])}
 
-}
+        //faceapi.nets.ssdMobilenetv1.loadFromUri(URL)//,
+        //
+
 
 loadModels();
 
