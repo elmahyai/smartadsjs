@@ -1,72 +1,124 @@
+// disable webgl
 $(document).ready(function() {
     faceapi.tf.ENV.set('WEBGL_PACK', false)
-})
+    const stream = navigator.mediaDevices.getUserMedia({ video: true })
 
+    stream.catch().then((stream) =>{
+        videoEl.srcObject = stream;
+        window.setInterval(function(){onPlay(videoEl)}, 1000)
+    })
+}
+)
 
+// get input video from camera
 const videoEl = document.getElementById('inputVideo')
+// canvas for storing the cropping face of person from the whole image
 const canvas = document.getElementById('overlay')
+
+// view video of the advertisement
 var video1 = document.getElementById("myVideo");
 
+// loading the models of faceapi
 const URL = "static/models"
 loadModels = async() => {
-
     await Promise.all([
         faceapi.nets.tinyFaceDetector.loadFromUri(URL),
         faceapi.nets.ageGenderNet.loadFromUri(URL),
         faceapi.nets.ssdMobilenetv1.loadFromUri(URL),
         faceapi.nets.faceExpressionNet.loadFromUri(URL)
-])
-
-}
-
+])}
 loadModels();
-
-
-
+/* loading the glasses model 
+The glasses model is converted from python. 
+Other future models will be loaded in the same way
+*/
 var model = 0
 async function wait_for_load_glasses(){
     model = await tf.loadLayersModel("static/models/glasses/model.json")
     console.log("model glassese have been loaded")
-
 }
+
 wait_for_load_glasses()
-    async function run() {
 
-        const stream = await navigator.mediaDevices.getUserMedia({ video: true })
-        videoEl.srcObject = stream;
 
-    }
-    function resizeCanvasAndResults(dimensions, canvas, results) {
-        const { width, height } = dimensions instanceof HTMLVideoElement
-            ? faceapi.getMediaDimensions(dimensions)
-            : dimensions
-        //return results.map(res => res)
-        return results
-    };
+document.getElementById("snap").addEventListener("click", function() {
+    run()
+});
+//---------------------------------------------------------------------------------
+// TODO TAREK 
+// محتاج مساعدة أخلي الكاميرا تطلب برمشن علي طول من غير ما يبقي ليها زرار منفصل
+// read camera input
+async function run() {
+    const stream = await navigator.mediaDevices.getUserMedia({ video: true })
+    videoEl.srcObject = stream;
 
-    function drawDetections(dimensions, canvas, results) {
+    window.setInterval(function(){onPlay(videoEl)}, 1000);
+}
 
-    };
-    function median(values){
-      if(values.length ===0) return 0;
+// resize the canvas to be of the size that we input to the model
+function resizeCanvasAndResults(dimensions, canvas, results) {
+    const { width, height } = dimensions instanceof HTMLVideoElement
+        ? faceapi.getMediaDimensions(dimensions)
+        : dimensions
+    //return results.map(res => res)
+    return results
+};
 
-      values.sort(function(a,b){
-          return a-b;
-      });
 
-      var half = Math.floor(values.length / 2);
+// function to calculate the median > I use it to find the median of the age over time for one person
+function median(values){
+    if(values.length ===0) return 0;
 
-      if (values.length % 2)
-          return values[half];
+    values.sort(function(a,b){
+        return a-b;
+    });
 
-      return (values[half - 1] + values[half]) / 2.0;
-    }
-    
+    var half = Math.floor(values.length / 2);
+
+    if (values.length % 2)
+        return values[half];
+
+    return (values[half - 1] + values[half]) / 2.0;
+}
+
+
+// collect data 
+
+var counter = 0
+var happyCounter = 0
+var normalCounter = 0
+var sadCounter = 0
+var countermanglasses = 0
+var countermannoglasses = 0
+var counterwomanglasses = 0
+var counterwomannoglasses = 0
+var reversecounter = 20000
+var time_in_front_of_camera = 0
+var total_time = 0
+var reverse_time_in_front_of_camera = 0
+var gender1 = ''
+var glassesp = ''
+var sadzone = 0
+var emotion_to_zero = 10
+var Males_Ads = 0
+var Females_Ads = 0
+var Glasses_Ads = 0
+var average_age = [0]
+var ageCorrector = 1
+run_every_other_time = 1
+
+
+
+document.getElementById("play").addEventListener("click", function() {
+
+  window.setInterval(function(){onPlay(videoEl)}, 1000);
+});
+var current_video = ""
+
+// run the smart ads 
     async function onPlay(videoEl) {
-
         const options = new faceapi.TinyFaceDetectorOptions({ inputSize: 416, scoreThreshold: 0.2 })
         var result = await faceapi.detectSingleFace(videoEl, options).withFaceExpressions().withAgeAndGender()
-
 
         if (result) {
             //console.log(result.age)
@@ -175,12 +227,6 @@ wait_for_load_glasses()
               canvas.height = 96
               ctx.drawImage(videoEl, crop.left, crop.top, crop.width, crop.height, 0, 0, 96, 96);
 
-
-              //const example = tf.browser.fromPixels(videoEl);  // for example
-
-              //const prediction = model.predict(example);
-              //console.log(prediction)
-              
               if (video1.getAttribute("src") === "static/images/m.mp4"){
                 current_video = "man"
             } else if (video1.getAttribute("src") === "static/images/w.mp4") {
@@ -289,43 +335,6 @@ wait_for_load_glasses()
               }
               
               }
-          //console.log(ageCorrector)
-          //console.log(age1)
-          //console.log(average_age)
     }
 
-    document.getElementById("snap").addEventListener("click", function() {
-        run()
-    });
-    var counter = 0
-    var happyCounter = 0
-    var normalCounter = 0
-    var sadCounter = 0
-    var countermanglasses = 0
-    var countermannoglasses = 0
-    var counterwomanglasses = 0
-    var counterwomannoglasses = 0
-    var reversecounter = 20000
-    var time_in_front_of_camera = 0
-    var total_time = 0
-    var reverse_time_in_front_of_camera = 0
-    var gender1 = ''
-    var glassesp = ''
-    var sadzone = 0
-    var emotion_to_zero = 10
-    var Males_Ads = 0
-    var Females_Ads = 0
-    var Glasses_Ads = 0
-    var average_age = [0]
-    var ageCorrector = 1
-    run_every_other_time = 1
-    document.getElementById("play").addEventListener("click", function() {
-      window.setInterval(function(){onPlay(videoEl)}, 1000);
-    });
-    var current_video = ""
-
-    function send_canvas_ctx(age1,gender1,ex1) {
-  
-
-
-        }
+    
