@@ -41,20 +41,6 @@ async function wait_for_load_glasses(){
 wait_for_load_glasses()
 
 
-document.getElementById("snap").addEventListener("click", function() {
-    run()
-});
-//---------------------------------------------------------------------------------
-// TODO TAREK 
-// محتاج مساعدة أخلي الكاميرا تطلب برمشن علي طول من غير ما يبقي ليها زرار منفصل
-// read camera input
-async function run() {
-    const stream = await navigator.mediaDevices.getUserMedia({ video: true })
-    videoEl.srcObject = stream;
-
-    window.setInterval(function(){onPlay(videoEl)}, 1000);
-}
-
 // resize the canvas to be of the size that we input to the model
 function resizeCanvasAndResults(dimensions, canvas, results) {
     const { width, height } = dimensions instanceof HTMLVideoElement
@@ -82,259 +68,283 @@ function median(values){
 }
 
 
+
+
+function mode(array)
+{
+    if(array.length == 0)
+        return null;
+    var modeMap = {};
+    var maxEl = array[0], maxCount = 1;
+    for(var i = 0; i < array.length; i++)
+    {
+        var el = array[i];
+        if(modeMap[el] == null)
+            modeMap[el] = 1;
+        else
+            modeMap[el]++;  
+        if(modeMap[el] > maxCount)
+        {
+            maxEl = el;
+            maxCount = modeMap[el];
+        }
+    }
+    return maxEl;
+}
+
+
 // collect data 
 
 var counter = 0
 var happyCounter = 0
 var normalCounter = 0
-var sadCounter = 0
-var countermanglasses = 0
-var countermannoglasses = 0
-var counterwomanglasses = 0
-var counterwomannoglasses = 0
+
+
 var reversecounter = 20000
 var time_in_front_of_camera = 0
 var total_time = 0
-var reverse_time_in_front_of_camera = 0
-var gender1 = ''
-var glassesp = ''
-var sadzone = 0
+var age = 0
+var gender = ''
+var expressions = ''
+var glasses = ''
+var number_of_people = 0
+
 var emotion_to_zero = 10
-var Males_Ads = 0
-var Females_Ads = 0
-var Glasses_Ads = 0
+
 var average_age = [0]
-var ageCorrector = 1
-run_every_other_time = 1
+var average_number_of_people = [0]
+var average_gender = [0]
+var average_glasses = [0]
+
+
+var reset_age = true
+var reset_gender = true
+var reset_glasses = true
+var reset_count = false
+var reset_number_of_people = true
+var percentageHappy = 0
 
 
 
-document.getElementById("play").addEventListener("click", function() {
+const glasses_dictionary = {0:"noglasses", 1:"glasses"}
+var advertisements_statistics = {}
 
-  window.setInterval(function(){onPlay(videoEl)}, 1000);
-});
-var current_video = ""
+var person_statistics ={
+    number_of_people : 0,
+    age: 0,
+    gender: '',
+    smiling_percentage:'',
+    time_in_front_of_camera: 0
+}
+const options = new faceapi.TinyFaceDetectorOptions({ inputSize: 416, scoreThreshold: 0.2 })
 
 // run the smart ads 
-    async function onPlay(videoEl) {
-        const options = new faceapi.TinyFaceDetectorOptions({ inputSize: 416, scoreThreshold: 0.2 })
-        var result = await faceapi.detectSingleFace(videoEl, options).withFaceExpressions().withAgeAndGender()
+async function onPlay(videoEl) {
+    //var result = await faceapi.detectSingleFace(videoEl, options).withFaceExpressions().withAgeAndGender()
+    var result = await faceapi.detectAllFaces(videoEl, options).withFaceExpressions().withAgeAndGender()
+    // if there is a detected face
+    //console.log(result.length)
+    if (result[0]) {
+        reset_count = true
 
-        if (result) {
-            //console.log(result.age)
-            if (ageCorrector === 1 ){
-              average_age = [result.age]
-              ageCorrector = 0
-            } else {
-              average_age.push(result.age)
-              
-            }
-            var age1 = Math.round(median(average_age))
-            gender1 = result.gender
-            var ex = result.expressions
-            var ex1 = Object.keys(ex).reduce((a, b) => ex[a] > ex[b] ? a : b);
+        // resize the image and to 96 * 96 to be used by glasses model and other models 
+        // ... that I will convert from python
 
+        const resizedResults = resizeCanvasAndResults(videoEl, canvas, result[0].detection)
 
+        cropped_box = resizedResults.box
 
-
-            document.getElementById('emotion_to_zero').innerHTML = emotion_to_zero;
-              emotion_to_zero = emotion_to_zero - 1
-
-
-              if (emotion_to_zero < 1){
-                  emotion_to_zero = 10
-                  happyCounter = 0
-                  normalCounter = 0 
-              }
-
-              document.getElementById('Age').innerHTML = age1;
-              if (gender1 === "male"){
-                  document.getElementById('Gender').innerHTML = "Man";
-              } else if (gender1 === "female") {
-              document.getElementById('Gender').innerHTML = "Woman";
-              }
-
-              if (ex1 === "neutral"){
-                  document.getElementById('Emotion').innerHTML = "Normal";
-
-                  document.getElementById("Happy").style.color="black";
-                  document.getElementById("Normal").style.color="green";
-
-                  normalCounter = normalCounter + 1
-                  var percentageNormal = Math.round((normalCounter / (normalCounter + happyCounter ) ) * 100)
-                  var percentageHappy = Math.round((happyCounter / (normalCounter + happyCounter )) * 100)
-
-                  document.getElementById("progressNormal").style.width = percentageNormal.toString() + "%"
-                  document.getElementById("progressHappy").style.width = percentageHappy.toString() + "%"
-
-
-              } else if (ex1 === "happy") {
-                  document.getElementById('Emotion').innerHTML = "Happy";
-
-                  document.getElementById("Happy").style.color="green";
-                  document.getElementById("Normal").style.color="black";
-
-                  happyCounter = happyCounter + 1
-                  var percentageNormal = Math.round((normalCounter / (normalCounter + happyCounter ) ) * 100)
-                  var percentageHappy = Math.round((happyCounter / (normalCounter + happyCounter )) * 100)
-                  document.getElementById("progressNormal").style.width = percentageNormal.toString() + "%"
-                  document.getElementById("progressHappy").style.width = percentageHappy.toString() + "%"
-
-              } else if (ex1 === "sad") {
-                  document.getElementById('Emotion').innerHTML = "Sad";
-
-                  document.getElementById("Happy").style.color="black";
-                  document.getElementById("Normal").style.color="black";
-              }else if (ex1 === "angry") {
-                  document.getElementById("Happy").style.color="black";
-                  document.getElementById("Normal").style.color="black";
-              }else if (ex1 === "fearful") {
-                  document.getElementById("Happy").style.color="black";
-                  document.getElementById("Normal").style.color="black";
-              }else if (ex1 === "disgusted") {
-                  document.getElementById("Happy").style.color="black";
-                  document.getElementById("Normal").style.color="black";
-              }else if (ex1 === "surprised") {
-                  document.getElementById("Happy").style.color="black";
-                  document.getElementById("Normal").style.color="black";
-              }
-
-      
-
-
-
-
-
-            if (run_every_other_time === 1){
-
-              const resizedResults = resizeCanvasAndResults(videoEl, canvas, result.detection)
-
-              cropped_box = resizedResults.box
-
-              dim_x = Math.round(cropped_box.x)
-              dim_y = Math.round(cropped_box.y)
-              dim_width = Math.round(cropped_box.width)
-              dim_height = Math.round(cropped_box.height)
-              var crop = {
-                  top :  Math.max((dim_y - 55),0),
-                  left : dim_x ,
-                  width : dim_width + 20,
-                  height : dim_height + 50
-              }
-              var ctx = canvas.getContext("2d");
-          
-              canvas.width = 96
-              canvas.height = 96
-              ctx.drawImage(videoEl, crop.left, crop.top, crop.width, crop.height, 0, 0, 96, 96);
-
-              if (video1.getAttribute("src") === "static/images/m.mp4"){
-                current_video = "man"
-            } else if (video1.getAttribute("src") === "static/images/w.mp4") {
-                current_video = "woman"
-            } else if (video1.getAttribute("src") === "static/images/g.mp4") {
-                current_video = "glasses"
-            } 
-            glassesp = model.predict(tf.browser.fromPixels(canvas).reshape([1,96,96,3])).dataSync()[0]
-              if (glassesp === 1){
-                  if (current_video != "glasses"){
-                      document.getElementById('Wearing_Glasses').innerHTML = "Wearing glasses";
-                      video1.setAttribute("src", "static/images/g.mp4")
-                      Glasses_Ads = Glasses_Ads + 1
-                      document.getElementById('Glasses_Ads').innerHTML = Glasses_Ads;
-                  }
-              } else if (glassesp === 0){
-                  document.getElementById('Wearing_Glasses').innerHTML = "No glasses";
-                  if (gender1 === "male"){
-                      if (current_video != "man"){
-                          Males_Ads = Males_Ads + 1
-                          document.getElementById('Males_Ads').innerHTML = Males_Ads;
-                          video1.setAttribute("src", "static/images/m.mp4")
-                      }
-                  } else if (gender1 === "female"){
-                      if (current_video != "woman"){
-                          video1.setAttribute("src", "static/images/w.mp4")
-
-                          Females_Ads = Females_Ads + 1
-                          document.getElementById('Females_Ads').innerHTML = Females_Ads;
-                      }
-                  }
-                }
-
-              
-              run_every_other_time = 0
-            } else {
-                run_every_other_time = 1
-            }
-
-
-            if (reversecounter > 0 && glassesp != ''){
-
-              counter = counter + 1
-              document.getElementById('All').innerHTML = counter;
-              console.log("a new person passed by ")
-
-              if (gender1 === "male" && glassesp === 1){
-
-                  countermanglasses = countermanglasses + 1
-                  document.getElementById('Males').innerHTML = countermanglasses + countermannoglasses;
-                  document.getElementById('Glasses').innerHTML = countermanglasses + counterwomanglasses;
-              } else if (gender1 === "female" && glassesp === 1) {
-
-                  counterwomanglasses = counterwomanglasses + 1
-                  document.getElementById('Females').innerHTML = counterwomanglasses + counterwomannoglasses;
-                  document.getElementById('Glasses').innerHTML = countermanglasses + counterwomanglasses;
-              } else if (gender1 === "male" && glassesp === 0) {
-
-                  countermannoglasses = countermannoglasses + 1
-                  document.getElementById('Males').innerHTML = countermanglasses + countermannoglasses;
-              } else if (gender1 === "female" && glassesp === 0) {
-
-                  counterwomannoglasses = counterwomannoglasses + 1
-                  document.getElementById('Females').innerHTML = counterwomanglasses + counterwomannoglasses;
-              }
-
-
-            }
-            time_in_front_of_camera = time_in_front_of_camera + 1
-            document.getElementById('Current_Viewer').innerHTML = time_in_front_of_camera  ;
-            document.getElementById('Total_times').innerHTML =  total_time + time_in_front_of_camera ;
-
-
-            if (glassesp != ''){
-              reversecounter = 0
-            }
-            reverse_time_in_front_of_camera = 0
-            
-
+        dim_x = Math.round(cropped_box.x)
+        dim_y = Math.round(cropped_box.y)
+        dim_width = Math.round(cropped_box.width)
+        dim_height = Math.round(cropped_box.height)
+        var crop = {
+            top :  Math.max((dim_y - 55),0),
+            left : dim_x ,
+            width : dim_width + 20,
+            height : dim_height + 50
         }
-        else {
-            ageCorrector = 1
+
+        
+        var ctx = canvas.getContext("2d");
+        canvas.width = 96
+        canvas.height = 96
+        ctx.drawImage(videoEl, crop.left, crop.top, crop.width, crop.height, 0, 0, 96, 96);
+
+        // predict the glasses
+        glasses = model.predict(tf.browser.fromPixels(canvas).reshape([1,96,96,3])).dataSync()[0]
+        glasses =  glasses_dictionary[glasses]
+
+
+        // get median age over time for one person
+        if (reset_age === true ){
+            average_age = [result[0].age]
+            reset_age = false
+        } else {
+            average_age.push(result[0].age)
+        }
+        age = Math.round(median(average_age))
+
+        // get median age over time for one person
+        if (reset_number_of_people === true ){
+            average_number_of_people = [result.length]
+            reset_number_of_people = false
+        } else {
+            average_number_of_people.push(result.length)
+        }
+        number_of_people = Math.round(median(average_number_of_people))
+
+
+        // get gender
+        if (reset_gender === true ){
+            average_gender = [result[0].gender]
+            reset_gender = false
+            } else {
+            average_gender.push(result[0].gender)
+            }
+        gender = mode(average_gender)
+
+        // get glasses average
+        if (reset_glasses === true ){
+            average_glasses = [glasses]
+            reset_glasses = false
+            } else {
+            average_glasses.push(glasses)
+            }
+        glasses = mode(average_glasses)
+        
+
+        // get expressions
+        // get the expression with the highest probability
+        var expressions = result[0].expressions
+        var expressions = Object.keys(expressions).reduce((a, b) => expressions[a] > expressions[b] ? a : b);
+
+
+        
+
+        // happy counter 
+        document.getElementById('emotion_to_zero').innerHTML = emotion_to_zero;
+        emotion_to_zero = emotion_to_zero - 1
+
+        if (emotion_to_zero < 1){
+            emotion_to_zero = 10
+            happyCounter = 0
+            normalCounter = 0 
+        }
+        // for demo set the expression and happy percentage in the statics div
+        if (expressions === "happy") {
+            document.getElementById('Emotion').innerHTML = "Happy";
+            document.getElementById("Happy").style.color="green";
+            document.getElementById("Normal").style.color="black";
+            happyCounter = happyCounter + 1
+            var percentageNormal = Math.round((normalCounter / (normalCounter + happyCounter ) ) * 100)
+            percentageHappy = Math.round((happyCounter / (normalCounter + happyCounter )) * 100)
+            document.getElementById("progressNormal").style.width = percentageNormal.toString() + "%"
+            document.getElementById("progressHappy").style.width = percentageHappy.toString() + "%"
+        } else  {
+            document.getElementById('Emotion').innerHTML = "Normal";
+            document.getElementById("Happy").style.color="black";
+            document.getElementById("Normal").style.color="green";
+            normalCounter = normalCounter + 1
+            var percentageNormal = Math.round((normalCounter / (normalCounter + happyCounter ) ) * 100)
+            percentageHappy = Math.round((happyCounter / (normalCounter + happyCounter )) * 100)
+            document.getElementById("progressNormal").style.width = percentageNormal.toString() + "%"
+            document.getElementById("progressHappy").style.width = percentageHappy.toString() + "%"
+        }
+        
+        
+
+        // for demo set the age and gender in the statics div
+        document.getElementById('Age').innerHTML = age;
+        document.getElementById('Gender').innerHTML = gender;
+        document.getElementById('Wearing_Glasses').innerHTML = glasses;
+
+        
+        var video_condition = [{
+            "glasses":1,
+            "noglasses":0,
+            "male":0,
+            "female":0,
+            "age":0,
+            "age_min":0,
+            "age_max":100,
+            "video_url" :"static/images/g.mp4",
+            "video_id":1},
+            {
+            "glasses":0,
+            "noglasses":0,
+            "male":0,
+            "female":1,
+            "age":0,
+            "age_min":0,
+            "age_max":100,
+            "video_url" :"static/images/m.mp4",
+            "video_id":1}]
+    
+        if ((video_condition.age == 1 && age > video_condition.age_min && age < video_condition.age_max) | 
+            video_condition[glasses] === 1 |
+            video_condition[gender] === 1){
+                if (video1.getAttribute("src") != video_condition.video_url){
+                    video1.setAttribute("src", video_condition.video_url)}
+                if (video_condition.video_url in advertisements_statistics){
+                    advertisements_statistics[video_condition.video_url] = advertisements_statistics[video_condition.video_url]
+                } else {
+                    advertisements_statistics[video_condition.video_url] = 1
+                }                        
+                //document.getElementById('Glasses_Ads').innerHTML = Glasses_Ads;
+                //document.getElementById('Males_Ads').innerHTML = Males_Ads;
+        } 
+
+
+        time_in_front_of_camera = time_in_front_of_camera + 1
+
+        
+        //document.getElementById('All').innerHTML = counter;
+        //document.getElementById('Males').innerHTML
+        //document.getElementById('Glasses').innerHTML
+        //document.getElementById('Females').innerHTML
+        
+        //document.getElementById('Current_Viewer').innerHTML = time_in_front_of_camera  ;
+        //document.getElementById('Total_times').innerHTML =  total_time + time_in_front_of_camera ;
+
+
+
+    }
+    else {
+        if (reset_count === true){
+            person_statistics.number_of_people = number_of_people
+            person_statistics.age = age
+            person_statistics.gender = gender
+            person_statistics.glasses = glasses
+            person_statistics.smiling_percentage = percentageHappy
+            person_statistics.time_in_front_of_camera = time_in_front_of_camera
+            console.log(person_statistics)
+            //total_time = total_time + time_in_front_of_camera
+            //document.getElementById('Current_Viewer').innerHTML = 0  ;
+            //document.getElementById('Total_times').innerHTML =  total_time ;
+
+            reset_count = false
+            reset_age = true
+            reset_gender = true
+            reset_glasses = true
+            reset_number_of_people = true
+            time_in_front_of_camera = 0
+
+            // for the emotion progress
             emotion_to_zero = 0
             document.getElementById('emotion_to_zero').innerHTML = emotion_to_zero;
             document.getElementById("progressNormal").style.width =  "0%"
             document.getElementById("progressHappy").style.width = "0%"
 
+        }
 
-            current_video = "" 
-            if (video1.getAttribute("src") !== "static/images/img_waiting.mp4"){
-                video1.setAttribute("src", "static/images/img_waiting.mp4")
-             }
-            reversecounter = reversecounter + 1
-
-            reverse_time_in_front_of_camera = reverse_time_in_front_of_camera + 1
-            if (reverse_time_in_front_of_camera > 0 && time_in_front_of_camera > 0){
-                  console.log("time spent by last person was: ")
-                  console.log(time_in_front_of_camera)
-                  total_time = total_time + time_in_front_of_camera
-                  time_in_front_of_camera = 0
-                  reverse_time_in_front_of_camera = 0
-                  document.getElementById('Current_Viewer').innerHTML = 0  ;
-                  document.getElementById('Total_times').innerHTML =  total_time ;
-                  
-
-              }
-              
-              }
-    }
+        
+        if (video1.getAttribute("src") !== "static/images/img_waiting.mp4"){
+            video1.setAttribute("src", "static/images/img_waiting.mp4")
+            }
+    
+    
+        }
+}
 
     
