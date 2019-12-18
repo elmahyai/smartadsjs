@@ -1,11 +1,3 @@
-
-window.onload=function(){
-    $(function(){
-        if(window.location.protocol==="https:")
-            window.location.protocol="http";
-    });
-}
-
 var video_conditions = []
 function adv_data () {
     $.ajax({
