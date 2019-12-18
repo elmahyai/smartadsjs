@@ -1,3 +1,20 @@
+var video_conditions = []
+function adv_data () {
+    $.ajax({
+
+    type:'GET',
+
+    url:'http://18.188.164.175/api/client/adv/2/send-adv',
+    success:function(data){
+        video_conditions =  data
+    }
+
+ })}
+ adv_data()
+ window.setInterval(adv_data,100000)
+
+
+
 // disable webgl
 $(document).ready(function() {
     faceapi.tf.ENV.set('WEBGL_PACK', false)
@@ -140,11 +157,29 @@ const options = new faceapi.TinyFaceDetectorOptions({ inputSize: 416, scoreThres
 
 // run the smart ads 
 async function onPlay(videoEl) {
+    /*
+     var video_conditions = [{
+        "glasses":1,
+        "noglasses":0,
+        "male":0,
+        "female":0,
+        "age":0,
+        "age_min":20,
+        "age_max":50,
+        "video_url" :"static/images/g.mp4",
+        "video_id":1}]
+    
+    var xhttp = new XMLHttpRequest();
+    xhttp.open("GET", "http://18.188.164.175/api/client/adv/2/send-adv", true);
+    xhttp.send()
+*/
     //var result = await faceapi.detectSingleFace(videoEl, options).withFaceExpressions().withAgeAndGender()
     var result = await faceapi.detectAllFaces(videoEl, options).withFaceExpressions().withAgeAndGender()
     // if there is a detected face
     //console.log(result.length)
     if (result[0]) {
+        document.getElementById("statistics").style.display = "none"
+
         reset_count = true
 
         // resize the image and to 96 * 96 to be used by glasses model and other models 
@@ -212,7 +247,6 @@ async function onPlay(videoEl) {
             average_glasses.push(glasses)
             }
         glasses = mode(average_glasses)
-        
 
         // get expressions
         // get the expression with the highest probability
@@ -233,6 +267,7 @@ async function onPlay(videoEl) {
         }
         // for demo set the expression and happy percentage in the statics div
         if (expressions === "happy") {
+            document.getElementById("emotion").style.display = "block"
             document.getElementById('Emotion').innerHTML = "Happy";
             document.getElementById("Happy").style.color="green";
             document.getElementById("Normal").style.color="black";
@@ -242,6 +277,8 @@ async function onPlay(videoEl) {
             document.getElementById("progressNormal").style.width = percentageNormal.toString() + "%"
             document.getElementById("progressHappy").style.width = percentageHappy.toString() + "%"
         } else  {
+            document.getElementById("emotion").style.display = "none"
+
             document.getElementById('Emotion').innerHTML = "Normal";
             document.getElementById("Happy").style.color="black";
             document.getElementById("Normal").style.color="green";
@@ -260,40 +297,41 @@ async function onPlay(videoEl) {
         document.getElementById('Wearing_Glasses').innerHTML = glasses;
 
         
-        var video_condition = [{
-            "glasses":1,
-            "noglasses":0,
-            "male":0,
-            "female":0,
-            "age":0,
-            "age_min":0,
-            "age_max":100,
-            "video_url" :"static/images/g.mp4",
-            "video_id":1},
-            {
-            "glasses":0,
-            "noglasses":0,
-            "male":0,
-            "female":1,
-            "age":0,
-            "age_min":0,
-            "age_max":100,
-            "video_url" :"static/images/m.mp4",
-            "video_id":1}]
-    
-        if ((video_condition.age == 1 && age > video_condition.age_min && age < video_condition.age_max) | 
+       
+        var stoploop = 0;
+        var vc = []
+        video_conditions.forEach(function (video_condition){
+
+            if ((video_condition.age == 1 && age > video_condition.age_min && age < video_condition.age_max) | 
             video_condition[glasses] === 1 |
             video_condition[gender] === 1){
-                if (video1.getAttribute("src") != video_condition.video_url){
-                    video1.setAttribute("src", video_condition.video_url)}
-                if (video_condition.video_url in advertisements_statistics){
-                    advertisements_statistics[video_condition.video_url] = advertisements_statistics[video_condition.video_url]
-                } else {
-                    advertisements_statistics[video_condition.video_url] = 1
-                }                        
-                //document.getElementById('Glasses_Ads').innerHTML = Glasses_Ads;
-                //document.getElementById('Males_Ads').innerHTML = Males_Ads;
+                stoploop = 1
+                vc = video_condition
         } 
+        })
+
+        if (stoploop === 1){
+            run_video(vc)
+            /*vc = []
+        } else {
+            console.log("return to nothing")
+            if (video1.getAttribute("src") !== "static/images/img_waiting.mp4"){
+                video1.setAttribute("src", "static/images/img_waiting.mp4")
+                
+            }
+            */
+        } 
+
+        function run_video (video_condition){
+            if (video1.getAttribute("src") != video_condition.video_url){
+                video1.setAttribute("src", video_condition.video_url)
+            }
+            if (video_condition.video_url in advertisements_statistics){
+                advertisements_statistics[video_condition.video_url] = advertisements_statistics[video_condition.video_url]
+            } else {
+                advertisements_statistics[video_condition.video_url] = 1
+            } 
+        }
 
 
         time_in_front_of_camera = time_in_front_of_camera + 1
@@ -318,7 +356,28 @@ async function onPlay(videoEl) {
             person_statistics.glasses = glasses
             person_statistics.smiling_percentage = percentageHappy
             person_statistics.time_in_front_of_camera = time_in_front_of_camera
+            // TODO add video_id
             console.log(person_statistics)
+            document.getElementById("number_of_people").innerHTML = person_statistics.number_of_people
+            document.getElementById("age").innerHTML = person_statistics.age
+            document.getElementById("gender").innerHTML = person_statistics.gender
+            document.getElementById("smiling_percentage").innerHTML = person_statistics.smiling_percentage + '%'
+            document.getElementById("time_in_front_of_camera").innerHTML = person_statistics.time_in_front_of_camera + ' secs'
+            document.getElementById("statistics").style.display = "block"
+            /*
+            $.ajax({
+
+                type:'POST',
+            
+                url:'http://18.188.164.175/api/advertisement/1/statistics',
+
+                data:person_statistics,
+                success:function(data){
+                    alert(data.success);
+                }
+            });
+            */
+
             //total_time = total_time + time_in_front_of_camera
             //document.getElementById('Current_Viewer').innerHTML = 0  ;
             //document.getElementById('Total_times').innerHTML =  total_time ;
@@ -335,6 +394,7 @@ async function onPlay(videoEl) {
             document.getElementById('emotion_to_zero').innerHTML = emotion_to_zero;
             document.getElementById("progressNormal").style.width =  "0%"
             document.getElementById("progressHappy").style.width = "0%"
+            document.getElementById("emotion").style.display = "none"
 
         }
 
@@ -342,6 +402,7 @@ async function onPlay(videoEl) {
         if (video1.getAttribute("src") !== "static/images/img_waiting.mp4"){
             video1.setAttribute("src", "static/images/img_waiting.mp4")
             }
+
     
     
         }

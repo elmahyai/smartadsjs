@@ -66,232 +66,106 @@
           </button>
         </div>
         <div class="modal-body">
-            <div class="adv-content">
-              <video autoplay muted loop id = "myVideo" src="static/images/img_waiting.mp4" type="video/mp4">
+            <div class="adv-content" style="position: absolute; width: 100%; height: 100%;position: absolute;top: 0;left: 0;">
+              <video  style="position: absolute; width: 100%; height: 100%;position: absolute;top: 0;left: 0;" autoplay muted loop id = "myVideo" src="static/images/img_waiting.mp4" type="video/mp4">
                         Your browser does not support the video tag.
               </video>
               
             </div>  
-            <div class="adv-overflow">
+            <div class="adv-overflow" >
                 <div class="chosen">
                     <div class="title">chosen Ad for</div>
-                    <ul>
-                        <li>
-                            <img src="static/images/brush.png">
-                            <span><small id="Age">Loading.. </small> Years old</span>
-                        </li>
-                        <li>
-                            <img src="static/images/gender.png">
-                            <span id="Gender">Loading..</span>
-                        </li>
-                        <li>
-                            <img src="static/images/smile.png">
-                            <span id="Emotion">Loading..</span>
-                        </li>
-                        <li>
-                            <img src="static/images/glasses.png">
-                            <span id="Wearing_Glasses">Loading..</span>
-                        </li>
-                    </ul>
-                </div>
-                <div class="statics">
-                    <div class="title">Statics</div>
-                    <fieldset>
-                        <legend>Viewers</legend>
                         <ul>
                             <li>
-                                <label>All</label>
-                                <span id="All">0</span>
+                                <img src="static/images/brush.png">
+                                <span><small id="Age">Loading.. </small> Years old</span>
                             </li>
                             <li>
-                                <label>Males</label>
-                                <span id="Males">0</span>
+                                <img src="static/images/gender.png">
+                                <span id="Gender">Loading..</span>
                             </li>
                             <li>
-                                <label>Females</label>
-                                <span id="Females">0</span>
+                                <img src="static/images/smile.png">
+                                <span id="Emotion">Loading..</span>
                             </li>
                             <li>
-                                <label>Glasses</label>
-                                <span id="Glasses">0</span>
+                                <img src="static/images/glasses.png">
+                                <span id="Wearing_Glasses">Loading..</span>
                             </li>
                         </ul>
-                    </fieldset>
-                    <fieldset>
-                        <legend>Ads</legend>
-                        <ul>
-                            <li>
-                                <label>Males Ads</label>
-                                <span id="Males_Ads">0</span>
-                            </li>
-                            <li>
-                                <label>Females Ads</label>
-                                <span id="Females_Ads">0</span>
-                            </li>
-                            <li>
-                                <label>Glasses Ads</label>
-                                <span id="Glasses_Ads">0</span>
-                            </li>
-                        </ul>
-                    </fieldset>
-                    <fieldset>
-                        <legend>Time</legend>
-                        <ul>
-                            <li>
-                                <label>Time duration</label>
-                                <span id="Current_Viewer">0</span>
-                            </li>
-                            <li>
-                                <label>Total times</label>
-                                <span id="Total_times">0</span>
-                            </li>
-                        </ul>
-                    </fieldset>
-                    <fieldset>
-                        <legend>Be happy for <small id="emotion_to_zero">10</small> seconds</legend>
-                        <ul>
-                            <li>
-                                <label id="Happy">Happy</label>
-                                <div class="progress">
-                                  <div class="progress-bar" id="progressHappy" role="progressbar" aria-valuenow="0"
-                                  aria-valuemin="0" aria-valuemax="100" style="width:0%">
-                                  </div>
-                                </div>
-                            </li>
-                            <li>
-                                <label id="Normal">Normal</label>
-                                <div class="progress">
-                                  <div class="progress-bar" id="progressNormal" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-                                </div>
-                                </div>
-                            </li>
-                        </ul>
-                    </fieldset>
+                    </div>
                 </div>
             </div>
-        </div>
-      </div>
+
+
+            <div class="adv-overflow" >
+                <div id="emotion" class="statics" style="display: none">
+                    <div class="title">Statics</div>
+                        <fieldset >
+                            <legend>Be happy for <small id="emotion_to_zero">10</small> seconds</legend>
+                            <ul>
+                                <li>
+                                    <label id="Happy">Happy</label>
+                                    <div class="progress">
+                                    <div class="progress-bar" id="progressHappy" role="progressbar" aria-valuenow="0"
+                                    aria-valuemin="0" aria-valuemax="100" style="width:0%">
+                                    </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <label id="Normal">Normal</label>
+                                    <div class="progress">
+                                    <div class="progress-bar" id="progressNormal" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </fieldset>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="adv-overflow" >
+                    <div id="statistics" class="statics" style="display: none">
+                            <fieldset >
+                                <legend>Statistics</legend>
+                                <ul>
+                                    <li>
+                                        <a>number_of_people: <label style="color: blue; font-weight: bold" id="number_of_people">0</label></a>
+                                    </li>
+                                    <li>
+                                        <a>age: <label style="color: blue; font-weight: bold" id="age">0</label></a>
+                                    </li>
+                                    <li>
+                                        <a>gender: <label style="color: blue; font-weight: bold" id="gender">0</label></a>
+                                    </li>
+                                    <li>
+                                        <a>smiling_percentage: <label style="color: blue; font-weight: bold" id="smiling_percentage">0</label></a>
+                                    </li>
+                                    <li>
+                                        <a>time_in_front_of_camera: <label style="color: blue; font-weight: bold" id="time_in_front_of_camera">0</label></a>
+                                    </li>
+                                </ul>
+                            </fieldset>
+                        </div>
+                    </div>
+                </div>
     </div>
   </div>
   <div id="wrap">
 
-    <!-- Header -->
-    <div id="header">   
-        <div class="navigation fixed-top background scroll">
-                <div class="container">
-                    <nav id="navbar-example" class="navbar navbar-expand-lg navbar-light">
-                        <a class="navbar-brand brand-logo" target="-blank" href="http://wakeb.tech/">
-                            <img src="static/images/logo.png" alt="Wakeb" title="Wakeb">
-                        </a>
-                                                
-                        <button class="navbar-toggler hamburger " style=" visibility: visible;" type="button" data-toggle="collapse" data-target="#nav-content" aria-controls="nav-content" aria-expanded="false" aria-label="Toggle navigation">
-                            <span class="hamburger-box">
-                            <span class="hamburger-label"></span>
-                            <span class="hamburger-inner"></span>
-                          </span>
-                          </button>                    
-
-                        <div class="top-nav collapse navbar-collapse" id="nav-content">   
-                            <ul class="navbar-nav ml-auto">
-                                <li class="nav-item">
-                                    <a href="#">Home</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="#">Products</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="#">Services</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="#">Solutions</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="#">Blog</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="#">About us</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="#">Contact us</a>
-                                </li>
-                                <li class="nav-item d-flex align-items-center">
-                                    <a href="index.rtl.html">
-                                        <img src="static/images/lang.png" class="mr-1">
-                                        <span>Arabic</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </nav>
-            </div>
-        </div>
-    </div>
-    <!--/. Header -->
-
     <!-- Page intro -->
     <div id="hero-bg" class="scroll top">
         <div class="container">
-            <div class="hero-inner row">
-                <div class="col-lg-6 col-md-7">
-                    <div class="hero-content">
-                        <div class="powered-by">
-                            <div class="media">
-                              <img src="static/images/robot.png" class="mr-2">
-                              <div class="media-body">
-                                <h5 class="my-0">Product powered by</h5>
-                                <h3 class="my-0">MASBAR</h3>
-                              </div>
-                            </div>
-                        </div>
-                        <h1>Intelligent Personalized Marketing System (IPMS)</h1>
-                        <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam era.</p>
-                        <ul>
-                            <li>Step1</li>
-                            <li >
-                                <button class="btn link" id="snap">
-                                    <span>Open Camera</span> 
-                                    <img src="static/images/cam.png"></button>
-                            </li>
-                            <li class="check"><img src="static/images/check.png"></li>
-                        </ul>
-                        <ul>
-                            <li>Step2</li>
-                            <li >
-                                <button class="btn  link" id="play" data-toggle="modal" data-target="#videoModal">
-                                    <span>View Ad</span> 
-                                    <img src="static/images/play.png"></button>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="col-lg-6 col-md-5 hide-small">
-                    <div class="here-side-img">
-                        <img src="static/images/face-IPMS.svg">
                         <video onplay="onPlay(this)" id="inputVideo" autoplay muted type="video/mp4"></video>
                         <canvas id="overlay" />
-                        </div>
-                    </div>
-                </div>
             </div>
             
         </div>
     </div>
-    <!-- /. Page intro <div id="videocontainer" class="divcontainer text-center" hidden>-->
 
-    <!--Footer-->
-    <div class="dark-footer">
-        <div class="container">
-        <div class="row">
-            <div class="logo col-md-4 ">
-                <a target="_blank" href="http://wakeb.tech/"><img src="static/images/light-wakeb.png" alt="wakeb" title="wakeb"></a>
-            </div>
-            <div class="col-md-8 cpr">
-                Product powered by Wakeb, All copyrights reserved © 2019
-            </div>
-        </div>
-        </div>
-    </div>
-    <!-- /. Footer -->    
 
   </div><!--./wrap -->
 
