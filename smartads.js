@@ -4,7 +4,7 @@ function adv_data () {
 
     type:'GET',
 
-    url:'//18.188.164.175/api/client/adv/2/send-adv',
+    url:'http://18.188.164.175/api/client/adv/2/send-adv',
     success:function(data){
         video_conditions =  data
     }
