@@ -1,15 +1,31 @@
 var video_conditions = []
+var waiting_video_url = ''
+var waiting_video_id = 0
+var screen_code = window.prompt("Enter screen code: ");
+var api_url = `http://18.188.164.175/api/client/adv/${screen_code}/send-adv` 
 function adv_data () {
     $.ajax({
-
+    
     type:'GET',
-
-    url:'http://18.188.164.175/api/client/adv/2/send-adv',
+    
+    url: api_url,
     success:function(data){
-        video_conditions =  data
-    }
+        video_conditions =  data.videos_list
+        waiting_url = data.waiting_url
+        not_predicted_url = data.not_predicted_url
+    }}).then(function(video_conditions){
+    video_conditions.forEach(function(video_condition){
+        console.log(video_condition)
+        if (video_condition.glasses == 0 && video_condition.noglasses == 0 && video_condition.male == 0 &&
+            video_condition.female == 0 && video_condition.age == 0  ){
+                console.log("waiting_video_running")
+                waiting_video_id = video_condition.video_id
+                waiting_video_url = video_condition.video_url
+    
+        }
+    })}) 
 
- })}
+ }
  adv_data()
  window.setInterval(adv_data,100000)
 
@@ -143,17 +159,21 @@ var percentageHappy = 0
 
 
 
-const glasses_dictionary = {0:"noglasses", 1:"glasses"}
 var advertisements_statistics = {}
 
 var person_statistics ={
     number_of_people : 0,
-    age: 0,
+    age: '',
     gender: '',
-    smiling_percentage:'',
-    time_in_front_of_camera: 0
+    glasses: "glasses",
+    smiling_percentage:0,
+    time_in_front_of_camera: 0,
+    advertisement_id: 0
 }
+
+
 const options = new faceapi.TinyFaceDetectorOptions({ inputSize: 416, scoreThreshold: 0.2 })
+var video_id = 0
 
 // run the smart ads 
 async function onPlay(videoEl) {
@@ -202,13 +222,31 @@ async function onPlay(videoEl) {
 
         
         var ctx = canvas.getContext("2d");
-        canvas.width = 96
-        canvas.height = 96
-        ctx.drawImage(videoEl, crop.left, crop.top, crop.width, crop.height, 0, 0, 96, 96);
+        canvas.width = 224
+        canvas.height = 224
+        ctx.drawImage(videoEl, crop.left, crop.top, crop.width, crop.height, 0, 0, 224, 224);
 
+        function preprocessImage(image) {
+            let tensor = tf.browser.fromPixels(image)
+                .resizeNearestNeighbor([224, 224])
+                .toFloat();
+            let offset = tf.scalar(127.5);
+            return tensor.sub(offset)
+                .div(offset)
+                .expandDims();
+        }
         // predict the glasses
-        glasses = model.predict(tf.browser.fromPixels(canvas).reshape([1,96,96,3])).dataSync()[0]
-        glasses =  glasses_dictionary[glasses]
+        //glasses = model.predict(tf.browser.fromPixels(canvas).reshape([1,224,224,3])).dataSync()[0]
+        glasses = model.predict(preprocessImage(canvas)).dataSync()[0]
+
+        //console.log(glasses)
+        //glasses =  glasses_dictionary[glasses]
+        if (glasses > .5) {
+            glasses = "glasses"
+        } else if (glasses < .50001){
+            glasses = "noglasses"
+        }
+        //const glasses_dictionary = {0:"noglasses", 1:"glasses"}
 
 
         // get median age over time for one person
@@ -219,7 +257,19 @@ async function onPlay(videoEl) {
             average_age.push(result[0].age)
         }
         age = Math.round(median(average_age))
-
+        if (age < 15){
+            age = '5-15'
+        } else if (age < 25){
+            age = '15-25'
+        } else if (age < 37){
+            age = '25-35'
+        } else if (age < 45){
+            age = '35-45'
+        } else if (age < 55){
+            age = '45-55'
+        } else {
+            age = '55-'
+        }
         // get median age over time for one person
         if (reset_number_of_people === true ){
             average_number_of_people = [result.length]
@@ -302,11 +352,11 @@ async function onPlay(videoEl) {
         var vc = []
         video_conditions.forEach(function (video_condition){
 
-            if ((video_condition.age == 1 && age > video_condition.age_min && age < video_condition.age_max) | 
-            video_condition[glasses] === 1 |
-            video_condition[gender] === 1){
+            if (video_condition[age] === 1 | video_condition[glasses] === 1 |video_condition[gender] === 1){
                 stoploop = 1
                 vc = video_condition
+                video_id = vc.video_id
+                console.log(video_id)
         } 
         })
 
@@ -320,6 +370,11 @@ async function onPlay(videoEl) {
                 
             }
             */
+        } else {
+            video_id = video_id
+            video_url = not_predicted_url
+            console.log("else happended")
+            console.log(video_id)
         } 
 
         function run_video (video_condition){
@@ -350,12 +405,16 @@ async function onPlay(videoEl) {
     }
     else {
         if (reset_count === true){
+            person_statistics.advertisement_id = video_id
             person_statistics.number_of_people = number_of_people
             person_statistics.age = age
             person_statistics.gender = gender
             person_statistics.glasses = glasses
             person_statistics.smiling_percentage = percentageHappy
             person_statistics.time_in_front_of_camera = time_in_front_of_camera
+
+
+
             // TODO add video_id
             console.log(person_statistics)
             document.getElementById("number_of_people").innerHTML = person_statistics.number_of_people
@@ -364,19 +423,19 @@ async function onPlay(videoEl) {
             document.getElementById("smiling_percentage").innerHTML = person_statistics.smiling_percentage + '%'
             document.getElementById("time_in_front_of_camera").innerHTML = person_statistics.time_in_front_of_camera + ' secs'
             document.getElementById("statistics").style.display = "block"
-            /*
+            
             $.ajax({
 
                 type:'POST',
             
-                url:'http://18.188.164.175/api/advertisement/1/statistics',
+                url:`http://18.188.164.175/api/client/advertisement/${screen_code}/statistics`,
 
                 data:person_statistics,
                 success:function(data){
-                    alert(data.success);
+                    console.log(data);
                 }
             });
-            */
+            
 
             //total_time = total_time + time_in_front_of_camera
             //document.getElementById('Current_Viewer').innerHTML = 0  ;
@@ -388,7 +447,7 @@ async function onPlay(videoEl) {
             reset_glasses = true
             reset_number_of_people = true
             time_in_front_of_camera = 0
-
+            video_id = 1
             // for the emotion progress
             emotion_to_zero = 0
             document.getElementById('emotion_to_zero').innerHTML = emotion_to_zero;
@@ -398,13 +457,9 @@ async function onPlay(videoEl) {
 
         }
 
-        
-        if (video1.getAttribute("src") !== "static/images/img_waiting.mp4"){
-            video1.setAttribute("src", "static/images/img_waiting.mp4")
+        if (video1.getAttribute("src") !== waiting_url){
+            video1.setAttribute("src", waiting_url)
             }
-
-    
-    
         }
 }
 
