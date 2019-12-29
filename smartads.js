@@ -16,8 +16,11 @@ function adv_data () {
     }}).then(function(video_conditions){
     video_conditions.forEach(function(video_condition){
         console.log(video_condition)
+
         if (video_condition.glasses == 0 && video_condition.noglasses == 0 && video_condition.male == 0 &&
-            video_condition.female == 0 && video_condition.age == 0  ){
+            video_condition.female == 0 && video_condition['5-15'] == 0 && video_condition['15-25'] == 0 &&
+             video_condition['25-35'] == 0 && video_condition['35-45'] == 0 && video_condition['45-45'] == 0 &&
+             video_condition['55-'] == 0  ){
                 console.log("waiting_video_running")
                 waiting_video_id = video_condition.video_id
                 waiting_video_url = video_condition.video_url
@@ -100,6 +103,12 @@ function median(values){
     return (values[half - 1] + values[half]) / 2.0;
 }
 
+function containsAll(needles, haystack){ 
+    for(var i = 0 , len = needles.length; i < len; i++){
+       if($.inArray(needles[i], haystack) == -1) return false;
+    }
+    return true;
+}
 
 
 
@@ -352,12 +361,24 @@ async function onPlay(videoEl) {
         var vc = []
         video_conditions.forEach(function (video_condition){
 
-            if (video_condition[age] === 1 | video_condition[glasses] === 1 |video_condition[gender] === 1){
+            // if (video_condition[age] === 1 | video_condition[glasses] === 1 |video_condition[gender] === 1){ 
+            
+            
+            
+            arr = []
+            Object.keys(video_condition).forEach(function(key) {
+                if (video_condition[key] == 1){ arr.push(key)}
+            });
+            console.log(arr)
+            predictions = [age, gender, glasses]
+            console.log(predictions)
+            if (containsAll(arr, predictions)){
+                console.log("yes")
                 stoploop = 1
                 vc = video_condition
                 video_id = vc.video_id
                 console.log(video_id)
-        } 
+            }
         })
 
         if (stoploop === 1){
@@ -375,6 +396,9 @@ async function onPlay(videoEl) {
             video_url = not_predicted_url
             console.log("else happended")
             console.log(video_id)
+            if (video1.getAttribute("src") !== not_predicted_url){
+                video1.setAttribute("src", not_predicted_url)
+                }
         } 
 
         function run_video (video_condition){
