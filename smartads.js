@@ -2,7 +2,7 @@ var video_conditions = []
 var waiting_video_url = ''
 var waiting_video_id = 0
 var screen_code = window.prompt("Enter screen code: ");
-var api_url = `http://18.188.164.175/api/client/adv/${screen_code}/send-adv` 
+var api_url = `https://wakeb-ads.azurewebsites.net/Adv-master/api/client/adv/${screen_code}/send-adv` 
 function adv_data () {
     $.ajax({
     
@@ -452,7 +452,7 @@ async function onPlay(videoEl) {
 
                 type:'POST',
             
-                url:`http://18.188.164.175/api/client/advertisement/${screen_code}/statistics`,
+                url:`https://wakeb-ads.azurewebsites.net/Adv-master/api/client/adv/${screen_code}/statistics`,
 
                 data:person_statistics,
                 success:function(data){
