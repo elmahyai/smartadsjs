@@ -452,7 +452,7 @@ async function onPlay(videoEl) {
 
                 type:'POST',
             
-                url:`https://wakeb-ads.azurewebsites.net/Adv-master/api/client/adv/${screen_code}/statistics`,
+                url:`https://wakeb-ads.azurewebsites.net/Adv-master/api/client/advertisement/${screen_code}/statistics`,
 
                 data:person_statistics,
                 success:function(data){
