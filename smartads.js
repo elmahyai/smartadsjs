@@ -369,15 +369,34 @@ async function onPlay(videoEl) {
             Object.keys(video_condition).forEach(function(key) {
                 if (video_condition[key] == 1){ arr.push(key)}
             });
-            console.log(arr)
             predictions = [age, gender, glasses]
-            console.log(predictions)
-            if (containsAll(arr, predictions)){
-                console.log("yes")
+
+            if (!(arr.includes("male")) && !(arr.includes("female"))){
+                arr.push("male")
+                arr.push("female")
+            }
+            if (!(arr.includes("glasses")) && !(arr.includes("noglasses"))){
+                arr.push("glasses")
+                arr.push("noglasses")
+            }
+            if (!(arr.includes('5-15')) && !(arr.includes('15-25')) && !(arr.includes('25-35')) && !(arr.includes('35-45'))
+             && !(arr.includes('45-55')) && !(arr.includes('55-'))){
+                arr.push('5-15')
+                arr.push('15-25')
+                arr.push('25-35')
+                arr.push('35-45')
+                arr.push('45-55')
+                arr.push('55-')
+            }
+
+            //console.log(predictions)
+            //console.log(arr)
+            if (containsAll(predictions, arr)){
+                //console.log("yes")
                 stoploop = 1
                 vc = video_condition
                 video_id = vc.video_id
-                console.log(video_id)
+                //console.log(video_id)
             }
         })
 
@@ -394,7 +413,7 @@ async function onPlay(videoEl) {
         } else {
             video_id = video_id
             video_url = not_predicted_url
-            console.log("else happended")
+            //console.log("else happended")
             console.log(video_id)
             if (video1.getAttribute("src") !== not_predicted_url){
                 video1.setAttribute("src", not_predicted_url)
