@@ -12,9 +12,8 @@ function adv_data () {
     success:function(data){
         video_conditions =  data.videos_list
         waiting_url = data.waiting_url
-        not_predicted_url = data.not_predicted_url
-    }}).then(function(video_conditions){
-    video_conditions.forEach(function(video_condition){
+        not_predicted_url = data.not_predicted_url;
+        video_conditions.forEach(function(video_condition){
         console.log(video_condition)
 
         if (video_condition.glasses == 0 && video_condition.noglasses == 0 && video_condition.male == 0 &&
@@ -24,9 +23,9 @@ function adv_data () {
                 console.log("waiting_video_running")
                 waiting_video_id = video_condition.video_id
                 waiting_video_url = video_condition.video_url
-    
-        }
-    })}) 
+            }
+        });
+    }});
 
  }
  adv_data()
