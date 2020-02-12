@@ -23,7 +23,6 @@ function adv_data () {
                 console.log("waiting_video_running")
                 waiting_video_id = video_condition.video_id
                 waiting_video_url = video_condition.video_url
-    
             }
         });
     }});
