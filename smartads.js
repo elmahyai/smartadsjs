@@ -1,8 +1,9 @@
+
 var video_conditions = []
 var waiting_video_url = ''
 var waiting_video_id = 0
 var screen_code = window.prompt("Enter screen code: ");
-var api_url = `https://wakeb-ads.azurewebsites.net/Adv-master/api/client/adv/${screen_code}/send-adv` 
+var api_url = 'https://wakeb-ads.azurewebsites.net/Adv-master/api/client/adv/' + screen_code + '/send-adv' 
 function adv_data () {
     $.ajax({
     
@@ -10,59 +11,80 @@ function adv_data () {
     
     url: api_url,
     success:function(data){
-        video_conditions =  data.videos_list
+        video_conditions =  data.videos_list 
         waiting_url = data.waiting_url
         not_predicted_url = data.not_predicted_url;
         video_conditions.forEach(function(video_condition){
-        console.log(video_condition)
-
-        if (video_condition.glasses == 0 && video_condition.noglasses == 0 && video_condition.male == 0 &&
-            video_condition.female == 0 && video_condition['5-15'] == 0 && video_condition['15-25'] == 0 &&
-             video_condition['25-35'] == 0 && video_condition['35-45'] == 0 && video_condition['45-45'] == 0 &&
-             video_condition['55-'] == 0  ){
-                console.log("waiting_video_running")
-                waiting_video_id = video_condition.video_id
-                waiting_video_url = video_condition.video_url
+            // console.log(video_condition)
+    
+            if (video_condition.glasses == 0 && video_condition.noglasses == 0 && video_condition.male == 0 &&
+                video_condition.female == 0 && video_condition['5-15'] == 0 && video_condition['15-25'] == 0 &&
+                 video_condition['25-35'] == 0 && video_condition['35-45'] == 0 && video_condition['45-45'] == 0 &&
+                 video_condition['55-'] == 0  ){
+                    // console.log("waiting_video_running")
+                    waiting_video_id = video_condition.video_id
+                    waiting_video_url = video_condition.video_url
+        
             }
-        });
-    }});
+        })
+    }}); 
 
  }
  adv_data()
- window.setInterval(adv_data,100000)
+ window.setInterval(adv_data,100000);
 
+var URL = "static/models"
+Promise.all([
+    faceapi.nets.tinyFaceDetector.loadFromUri(URL),
+    faceapi.nets.faceLandmark68Net.loadFromUri(URL),
+    faceapi.nets.ageGenderNet.loadFromUri(URL),
+    faceapi.nets.ssdMobilenetv1.loadFromUri(URL),
+    faceapi.nets.faceRecognitionNet.loadFromUri(URL),
+    faceapi.nets.faceExpressionNet.loadFromUri(URL)
+]).then(loadTheVideo());
 
-
-// disable webgl
-$(document).ready(function() {
-    faceapi.tf.ENV.set('WEBGL_PACK', false)
-    const stream = navigator.mediaDevices.getUserMedia({ video: true })
-
-    stream.catch().then((stream) =>{
-        videoEl.srcObject = stream;
-        window.setInterval(function(){onPlay(videoEl)}, 1000)
-    })
-}
-)
-
-// get input video from camera
-const videoEl = document.getElementById('inputVideo')
+var videoEl = document.getElementById('inputVideo')
 // canvas for storing the cropping face of person from the whole image
-const canvas = document.getElementById('overlay')
+var canvas = document.getElementById('overlay');
 
 // view video of the advertisement
 var video1 = document.getElementById("myVideo");
 
+ function loadTheVideo() {
+    faceapi.tf.ENV.set('WEBGL_PACK', false)
+    var stream = navigator.mediaDevices.getUserMedia({ video: true })
+
+    stream.then(function (stream) {
+        videoEl.srcObject = stream;
+        window.setInterval(function(){onPlay(videoEl)}, 1000)
+    })
+}
+
+
+// videoEl.addEventListener("play", function () {
+
+//     loadTheVideo();
+
+// });
+
+
+
+
+
+// disable webgl
+// $(document).ready(function() {
+    
+// }
+// )
+
+// get input video from camera
+
+
 // loading the models of faceapi
-const URL = "static/models"
-loadModels = async() => {
-    await Promise.all([
-        faceapi.nets.tinyFaceDetector.loadFromUri(URL),
-        faceapi.nets.ageGenderNet.loadFromUri(URL),
-        faceapi.nets.ssdMobilenetv1.loadFromUri(URL),
-        faceapi.nets.faceExpressionNet.loadFromUri(URL)
-])}
-loadModels();
+
+        //  async function loadModels() {
+// }
+// loadModels();
 /* loading the glasses model 
 The glasses model is converted from python. 
 Other future models will be loaded in the same way
@@ -70,7 +92,7 @@ Other future models will be loaded in the same way
 var model = 0
 async function wait_for_load_glasses(){
     model = await tf.loadLayersModel("static/models/glasses/model.json")
-    console.log("model glassese have been loaded")
+    // console.log("model glassese have been loaded")
 }
 
 wait_for_load_glasses()
@@ -78,7 +100,7 @@ wait_for_load_glasses()
 
 // resize the canvas to be of the size that we input to the model
 function resizeCanvasAndResults(dimensions, canvas, results) {
-    const { width, height } = dimensions instanceof HTMLVideoElement
+    var { width, height } = dimensions instanceof HTMLVideoElement
         ? faceapi.getMediaDimensions(dimensions)
         : dimensions
     //return results.map(res => res)
@@ -180,7 +202,7 @@ var person_statistics ={
 }
 
 
-const options = new faceapi.TinyFaceDetectorOptions({ inputSize: 416, scoreThreshold: 0.2 })
+var options = new faceapi.TinyFaceDetectorOptions({ inputSize: 416, scoreThreshold: 0.2 })
 var video_id = 0
 
 // run the smart ads 
@@ -213,7 +235,7 @@ async function onPlay(videoEl) {
         // resize the image and to 96 * 96 to be used by glasses model and other models 
         // ... that I will convert from python
 
-        const resizedResults = resizeCanvasAndResults(videoEl, canvas, result[0].detection)
+        var resizedResults = resizeCanvasAndResults(videoEl, canvas, result[0].detection)
 
         cropped_box = resizedResults.box
 
@@ -309,7 +331,9 @@ async function onPlay(videoEl) {
         // get expressions
         // get the expression with the highest probability
         var expressions = result[0].expressions
-        var expressions = Object.keys(expressions).reduce((a, b) => expressions[a] > expressions[b] ? a : b);
+        var expressions = Object.keys(expressions).reduce(function (a, b) {
+            return expressions[a] > expressions[b] ? a : b
+        });
 
 
         
@@ -413,7 +437,7 @@ async function onPlay(videoEl) {
             video_id = video_id
             video_url = not_predicted_url
             //console.log("else happended")
-            console.log(video_id)
+            // console.log(video_id)
             if (video1.getAttribute("src") !== not_predicted_url){
                 video1.setAttribute("src", not_predicted_url)
                 }
@@ -458,7 +482,7 @@ async function onPlay(videoEl) {
 
 
             // TODO add video_id
-            console.log(person_statistics)
+            // console.log(person_statistics)
             document.getElementById("number_of_people").innerHTML = person_statistics.number_of_people
             document.getElementById("age").innerHTML = person_statistics.age
             document.getElementById("gender").innerHTML = person_statistics.gender
@@ -470,11 +494,11 @@ async function onPlay(videoEl) {
 
                 type:'POST',
             
-                url:`https://wakeb-ads.azurewebsites.net/Adv-master/api/client/advertisement/${screen_code}/statistics`,
+                url:'https://wakeb-ads.azurewebsites.net/Adv-master/api/client/advertisement/' + screen_code + '/statistics',
 
                 data:person_statistics,
                 success:function(data){
-                    console.log(data);
+                    // console.log(data);
                 }
             });
             
