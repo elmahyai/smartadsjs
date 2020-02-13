@@ -1,3 +1,12 @@
+var URL = "static/models"
+Promise.all([
+    faceapi.nets.tinyFaceDetector.loadFromUri(URL),
+    faceapi.nets.faceLandmark68Net.loadFromUri(URL),
+    faceapi.nets.ageGenderNet.loadFromUri(URL),
+    faceapi.nets.ssdMobilenetv1.loadFromUri(URL),
+    faceapi.nets.faceRecognitionNet.loadFromUri(URL),
+    faceapi.nets.faceExpressionNet.loadFromUri(URL)
+]).then(loadTheVideo());
 
 var video_conditions = []
 var waiting_video_url = ''
@@ -33,15 +42,7 @@ function adv_data () {
  adv_data()
  window.setInterval(adv_data,100000);
 
-var URL = "static/models"
-Promise.all([
-    faceapi.nets.tinyFaceDetector.loadFromUri(URL),
-    faceapi.nets.faceLandmark68Net.loadFromUri(URL),
-    faceapi.nets.ageGenderNet.loadFromUri(URL),
-    faceapi.nets.ssdMobilenetv1.loadFromUri(URL),
-    faceapi.nets.faceRecognitionNet.loadFromUri(URL),
-    faceapi.nets.faceExpressionNet.loadFromUri(URL)
-]).then(loadTheVideo());
+
 
 var videoEl = document.getElementById('inputVideo')
 // canvas for storing the cropping face of person from the whole image
